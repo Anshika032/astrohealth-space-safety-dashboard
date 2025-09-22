@@ -1,0 +1,12 @@
+[submodule "external/poliastro"]
+	path = external/poliastro
+	url = https://github.com/poliastro/poliastro
+[submodule "external/cascade"]
+	path = external/cascade
+	url = https://github.com/esa/cascade
+[submodule "external/space-debris"]
+	path = external/space-debris
+	url = https://github.com/kushasahu7/Space-Debris
+[submodule "external/pypredict]"]
+	path = external/pypredict]
+	url = https://github.com/spel-uchile/Pypredict
