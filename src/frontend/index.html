@@ -1,5 +1,5 @@
-<!DOCTYPE html> 
-<html lang="en" class="h-full">
+<!DOCTYPE html>
+<html lang="en" class="h-full dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,47 +27,39 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     /* Orbit animation only in dark mode */
     .dark .orbit-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      overflow: hidden; z-index: -1;
       background: radial-gradient(circle at center, #0b1020, #000);
     }
     .dark .orbit {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: absolute; top: 50%; left: 50%;
       border: 1px dashed rgba(255,255,255,0.08);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
+      border-radius: 50%; transform: translate(-50%, -50%);
       animation: spin linear infinite;
     }
     .dark .planet {
-      border-radius: 50%;
-      position: absolute;
-      top: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 0 10px rgba(255,255,255,0.6);
+      border-radius: 50%; position: absolute; top: -6px; left: 50%;
+      transform: translateX(-50%); box-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
     @keyframes spin {
       from { transform: translate(-50%, -50%) rotate(0deg); }
       to { transform: translate(-50%, -50%) rotate(360deg); }
     }
+
+    /* 🔥 Risk Glow Effect */
+    body.high-risk { box-shadow: inset 0 0 40px rgba(255,0,0,0.6); }
   </style>
 </head>
 
 <body class="h-full antialiased bg-gray-50 text-gray-900 dark:bg-[#0B1020] dark:text-white/90">
   <!-- Dark mode orbit background -->
   <div class="orbit-bg hidden dark:block">
-    <!-- 8 Orbits with Planets -->
     <div class="orbit" style="width:250px; height:250px; animation-duration: 50s;">
       <div class="planet" style="width:10px; height:10px; background:#4ade80;"></div>
     </div>
@@ -95,7 +87,6 @@
   </div>
 
   <div class="min-h-screen grid grid-cols-1 lg:grid-cols-[280px_1fr] relative">
-
     <!-- Sidebar -->
     <aside class="hidden lg:flex flex-col gap-4 p-4 sticky top-0 h-screen z-10">
       <div class="rounded-xl px-4 py-5 bg-gray-100 border border-gray-300 dark:bg-white/5 dark:border-white/10 flex items-center gap-3">
@@ -107,49 +98,34 @@
       </div>
       <nav class="flex-1 space-y-2 text-sm">
         <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="layout-dashboard"></i> Dashboard</a>
-        <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="satellite"></i> Satellites</a>
+         <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="satellite"></i> Satellities+Debris</a>
+        <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="stethoscope"></i> Astronaut Health</a>
         <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="asteroid"></i> Debris</a>
-
-        <!-- Detection Camera Button -->
-        <a href="http://10.226.108.77:5000/video_feed" target="_blank" 
-           class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10">
-          <i data-lucide="camera"></i> Detection Camera
-        </a>
-
-        <!-- NASA Space Debris Data Button -->
-        <a href="https://www.nasa.gov/headquarters/library/find/bibliographies/space-debris/" target="_blank" 
-           class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10">
-          <i data-lucide="book-open"></i> NASA Space Debris Data
-        </a>
-
-        <!-- Alerts button with dynamic badge -->
+        <a href="http://10.226.108.77:5000/video_feed" target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="camera"></i> Detection Camera</a>
+        <a href="https://www.nasa.gov/headquarters/library/find/bibliographies/space-debris/" target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="book-open"></i> NASA Space Debris Data</a>
         <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10">
-          <span class="flex items-center gap-2">
-            <i data-lucide="alert-triangle"></i> Alerts
-          </span>
+          <span class="flex items-center gap-2"><i data-lucide="alert-triangle"></i> Alerts</span>
           <span id="alertBadge" class="hidden px-2 py-0.5 text-xs rounded-full font-semibold"></span>
         </a>
-
-        <!-- More Information Section -->
         <div class="mt-4">
           <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 px-3">More Information</p>
-          <a href="https://svs.gsfc.nasa.gov/5571" target="_blank"
-             class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10">
-            <i data-lucide="globe"></i> NASA Scientific Visualization Data
-          </a>
+          <a href="https://svs.gsfc.nasa.gov/5571" target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10"><i data-lucide="globe"></i> NASA Scientific Visualization Data</a>
         </div>
       </nav>
     </aside>
-    
+
+
     <!-- Main -->
     <main class="flex flex-col min-h-screen z-10">
       <!-- Top bar -->
       <header class="sticky top-0 bg-gray-200 dark:bg-[#111936] px-4 py-3 flex items-center justify-between">
         <h1 class="text-lg font-semibold">Dashboard</h1>
         <div class="flex items-center gap-3">
-          <input type="text" id="searchBox" placeholder="Search object..."
-            class="px-2 py-1 rounded bg-gray-100 border border-gray-300 text-sm dark:bg-white/10 dark:border-white/20">
-          <button id="themeToggle" class="px-2 py-1 rounded bg-gray-100 border border-gray-300 dark:bg-white/10 dark:border-white/20">🌙</button>
+          <input type="text" id="searchBox" placeholder="Search object..." class="px-2 py-1 rounded bg-gray-100 border border-gray-300 text-sm dark:bg-white/10 dark:border-white/20">
+          <label class="flex items-center gap-1 text-xs">
+            <input id="voiceToggle" type="checkbox" class="accent-emerald-600" checked>
+            Voice Alerts
+          </label>
           <span id="wsBadge" class="px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-700 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-200 dark:border-amber-400/30">Connecting…</span>
         </div>
       </header>
@@ -158,33 +134,29 @@
       <section class="p-6 space-y-6">
         <!-- Stats row + chart -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
+          <div class="rounded-xl p-4 border bg-gray-100 dark:bg-white/5 dark:border-white/10">
             <p class="text-sm text-gray-600 dark:text-white/60">Active Satellites</p>
             <p class="text-3xl font-bold" id="statSat">0</p>
           </div>
-          <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
+          <div class="rounded-xl p-4 border bg-gray-100 dark:bg-white/5 dark:border-white/10">
             <p class="text-sm text-gray-600 dark:text-white/60">Tracked Debris</p>
             <p class="text-3xl font-bold" id="statDebris">0</p>
           </div>
-          <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
+          <div class="rounded-xl p-4 border bg-gray-100 dark:bg-white/5 dark:border-white/10">
             <p class="text-sm text-gray-600 dark:text-white/60">Close Approaches (24h)</p>
             <p class="text-3xl font-bold" id="statCA">0</p>
           </div>
-          <!-- Chart -->
-          <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
+          <div class="rounded-xl p-4 border bg-gray-100 dark:bg-white/5 dark:border-white/10">
             <canvas id="satDebrisChart"></canvas>
           </div>
         </div>
 
         <!-- Alerts + Table -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Alerts -->
           <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
             <h2 class="text-lg font-semibold mb-3">Real-time Alerts</h2>
             <ul id="alerts" class="space-y-3 max-h-[400px] overflow-y-auto pr-1"></ul>
           </div>
-
-          <!-- Conjunctions Table -->
           <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
             <h2 class="text-lg font-semibold mb-3">Recent Conjunction Events</h2>
             <div class="overflow-x-auto">
@@ -203,144 +175,394 @@
             </div>
           </div>
         </div>
+
+        <!-- 👩‍🚀 Astronaut Health (moved to END) -->
+        <div class="rounded-xl p-4 border bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
+          <h2 class="text-lg font-semibold mb-3">👩‍🚀 Astronaut Health</h2>
+
+          <!-- Gauges row -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
+            <div><canvas id="hrGauge" width="120" height="120"></canvas><p class="font-semibold mt-2">Heart Rate</p><p id="hr" class="text-lg font-bold">-- bpm</p><p id="hr-alert" class="text-sm"></p></div>
+            <div><canvas id="spo2Gauge" width="120" height="120"></canvas><p class="font-semibold mt-2">SpO₂</p><p id="spo2" class="text-lg font-bold">-- %</p><p id="spo2-alert" class="text-sm"></p></div>
+            <div><canvas id="stressGauge" width="120" height="120"></canvas><p class="font-semibold mt-2">Stress</p><p id="stress" class="text-lg font-bold">-- /5</p><p id="stress-alert" class="text-sm"></p></div>
+            <div><canvas id="respGauge" width="120" height="120"></canvas><p class="font-semibold mt-2">Respiration</p><p id="resp" class="text-lg font-bold">-- rpm</p><p id="resp-alert" class="text-sm"></p></div>
+            <div><canvas id="tempGauge" width="120" height="120"></canvas><p class="font-semibold mt-2">Body Temp</p><p id="temp" class="text-lg font-bold">-- °C</p><p id="temp-alert" class="text-sm"></p></div>
+            <div><canvas id="boneGauge" width="120" height="120"></canvas><p class="font-semibold mt-2">Bone Density</p><p id="bone" class="text-lg font-bold">--</p><p id="bone-alert" class="text-sm"></p></div>
+          </div>
+
+          <!-- BP mini-card -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="rounded-lg p-3 bg-white/60 dark:bg-white/5 border dark:border-white/10">
+              <p class="text-xs text-gray-600 dark:text-white/60">Blood Pressure</p>
+              <p id="bp" class="text-lg font-semibold">--/-- mmHg</p>
+              <p id="bp-alert" class="text-xs"></p>
+            </div>
+          </div>
+
+          <div class="mt-6"><canvas id="healthHistory"></canvas></div>
+          <button onclick="exportReport()" class="mt-4 px-4 py-2 rounded bg-emerald-500 text-white text-sm">📄 Export Health + Debris Report</button>
+          <div id="aiRecommendations" class="mt-4 p-3 text-sm rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-200">✅ Waiting for health data…</div>
+        </div>
       </section>
     </main>
   </div>
 
+
   <script>
-    lucide.createIcons();
+  lucide.createIcons();
 
-    const statSat = document.getElementById("statSat");
-    const statDebris = document.getElementById("statDebris");
-    const statCA = document.getElementById("statCA");
-    const alerts = document.getElementById("alerts");
-    const table = document.getElementById("cjTable");
-    const wsBadge = document.getElementById("wsBadge");
-    const alertBadge = document.getElementById("alertBadge");
+  const statSat = document.getElementById("statSat");
+  const statDebris = document.getElementById("statDebris");
+  const statCA = document.getElementById("statCA");
+  const alerts = document.getElementById("alerts");
+  const table = document.getElementById("cjTable");
+  const wsBadge = document.getElementById("wsBadge");
+  const alertBadge = document.getElementById("alertBadge");
 
-    let cjData = [];
+  // Health metric DOM refs
+  const hrEl = document.getElementById("hr");
+  const hrAlert = document.getElementById("hr-alert");
+  const spo2El = document.getElementById("spo2");
+  const spo2Alert = document.getElementById("spo2-alert");
+  const stressEl = document.getElementById("stress");
+  const stressAlert = document.getElementById("stress-alert");
+  const respEl = document.getElementById("resp");
+  const respAlert = document.getElementById("resp-alert");
+  const tempEl = document.getElementById("temp");
+  const tempAlert = document.getElementById("temp-alert");
+  const boneEl = document.getElementById("bone");
+  const boneAlert = document.getElementById("bone-alert");
+  const bpEl = document.getElementById("bp");
+  const bpAlert = document.getElementById("bp-alert");
 
-    function renderTable(rows) {
-      table.innerHTML = rows.map(r => `
-        <tr>
-          <td class="py-2 pr-4">${r.t}</td>
-          <td class="py-2 pr-4">${r.a}</td>
-          <td class="py-2 pr-4">${r.b}</td>
-          <td class="py-2 pr-4">${r.d.toFixed(2)}</td>
-          <td class="py-2 pr-4">
-            <span class="px-2 py-1 rounded-full text-xs ${
-              r.risk==='High'
-                ?'bg-red-100 text-red-700 border border-red-300 dark:bg-red-500/20 dark:text-red-200 dark:border-red-400/30'
-                :r.risk==='Medium'
-                ?'bg-amber-100 text-amber-700 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-200 dark:border-amber-400/30'
-                :'bg-emerald-100 text-emerald-700 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-200 dark:border-emerald-400/30'
-            }">${r.risk}</span>
-          </td>
-        </tr>`).join('');
+  let cjData = [];
+
+  // ✅ Voice Alerts
+  let lastSpokenAt = 0;
+  function speak(text) {
+    const enabled = document.getElementById("voiceToggle")?.checked;
+    if (!enabled) return;
+    const now = Date.now();
+    if (now - lastSpokenAt < 3000) return;
+    lastSpokenAt = now;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    utter.rate = 1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  function renderTable(rows) {
+    table.innerHTML = rows.map(r => `
+      <tr>
+        <td class="py-2 pr-4">${r.t}</td>
+        <td class="py-2 pr-4">${r.a}</td>
+        <td class="py-2 pr-4">${r.b}</td>
+        <td class="py-2 pr-4">${r.d.toFixed(2)}</td>
+        <td class="py-2 pr-4">
+          <span class="px-2 py-1 rounded-full text-xs ${
+            r.risk === "High"
+              ? "bg-red-100 text-red-700 border border-red-300 dark:bg-red-500/20 dark:text-red-200"
+              : r.risk === "Medium"
+              ? "bg-amber-100 text-amber-700 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-200"
+              : "bg-emerald-100 text-emerald-700 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-200"
+          }">${r.risk}</span>
+        </td>
+      </tr>`).join("");
+  }
+
+  // Chart setup (sat vs debris)
+  const ctx = document.getElementById("satDebrisChart");
+  let satDebrisChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Satellites", "Debris"],
+      datasets: [{ label: "Objects", data: [0, 0], borderWidth: 1 }]
     }
+  });
 
-    // Chart setup
-    const ctx = document.getElementById('satDebrisChart');
-    let satDebrisChart = new Chart(ctx, {
-      type: 'doughnut',
+  function updateChart(sats, debris) {
+    satDebrisChart.data.datasets[0].data = [sats, debris];
+    satDebrisChart.update();
+  }
+
+  // Health Gauges + History
+  function createGauge(ctx, color, maxVal) {
+    return new Chart(ctx, {
+      type: "doughnut",
       data: {
-        labels: ['Satellites', 'Debris'],
-        datasets: [{
-          label: 'Objects',
-          data: [0, 0],
-          borderWidth: 1
-        }]
+        datasets: [
+          { data: [0, maxVal], backgroundColor: [color, "#333"], cutout: "80%" }
+        ]
+      },
+      options: {
+        rotation: -90,
+        circumference: 180,
+        plugins: { legend: { display: false } }
       }
     });
+  }
 
-    function updateChart(sats, debris){
-      satDebrisChart.data.datasets[0].data = [sats, debris];
-      satDebrisChart.update();
+  let hrGauge = createGauge(document.getElementById("hrGauge"), "red", 150);
+  let spo2Gauge = createGauge(document.getElementById("spo2Gauge"), "blue", 100);
+  let stressGauge = createGauge(document.getElementById("stressGauge"), "yellow", 5);
+  let respGauge = createGauge(document.getElementById("respGauge"), "purple", 40);
+  let tempGauge = createGauge(document.getElementById("tempGauge"), "orange", 42);
+  let boneGauge = createGauge(document.getElementById("boneGauge"), "teal", 4);
+
+  const historyCtx = document.getElementById("healthHistory").getContext("2d");
+  const healthChart = new Chart(historyCtx, {
+    type: "line",
+    data: {
+      labels: [],
+      datasets: [
+        { label: "HR", data: [], borderColor: "red", fill: false },
+        { label: "SpO₂", data: [], borderColor: "blue", fill: false },
+        { label: "Stress", data: [], borderColor: "yellow", fill: false },
+        { label: "Resp", data: [], borderColor: "purple", fill: false },
+        { label: "Temp", data: [], borderColor: "orange", fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: "white" } } },
+      scales: {
+        x: { ticks: { color: "white" } },
+        y: { ticks: { color: "white" } }
+      }
     }
+  });
 
-    // Theme toggle
-    const themeBtn = document.getElementById("themeToggle");
-    themeBtn.onclick = () => {
-      document.documentElement.classList.toggle("dark");
+  // 🧠 AI Recommendations
+  function updateRecommendations(d) {
+    let recs = [];
+
+    if (d.hr > 130) recs.push("⚠ High HR — Recommend rest, hydration.");
+    else if (d.hr < 60) recs.push("⚠ Low HR — Monitor fatigue.");
+    else recs.push("✅ Heart Rate normal.");
+
+    if (d.spo2 < 90) recs.push("⚠ Critical O₂ — Use oxygen mask.");
+    else if (d.spo2 < 95) recs.push("⚠ Low O₂ — Check supply.");
+    else recs.push("✅ Oxygen levels normal.");
+
+    if (d.stress > 3) recs.push("⚠ High Stress — Relaxation needed.");
+    else if (d.stress === 3) recs.push("⚠ Medium Stress — Monitor workload.");
+    else recs.push("✅ Stress under control.");
+
+    if (d.resp > 25) recs.push("⚠ High Respiration — Possible distress.");
+    else if (d.resp < 10) recs.push("⚠ Low Respiration — Check breathing.");
+    else recs.push("✅ Respiration normal.");
+
+    if (d.temp > 38) recs.push("⚠ High Temp — Possible fever.");
+    else if (d.temp < 36) recs.push("⚠ Low Temp — Possible hypothermia.");
+    else recs.push("✅ Temperature normal.");
+
+    if (d.bone_tscore < -2.5) recs.push("⚠ Osteoporosis risk — Critical.");
+    else if (d.bone_tscore < -1) recs.push("⚠ Low bone density — Monitor.");
+    else recs.push("✅ Bone density normal.");
+
+    if (d.bp_sys > 140 || d.bp_dia > 90) recs.push("⚠ High BP — Monitor cardiovascular strain.");
+    else if (d.bp_sys < 90 || d.bp_dia < 60) recs.push("⚠ Low BP — Risk of dizziness/fatigue.");
+    else recs.push("✅ Blood pressure normal.");
+
+    document.getElementById("aiRecommendations").innerHTML = recs.join("<br>");
+  }
+
+  function updateHealthUI(d) {
+    // --- Text values
+    hrEl.textContent = d.hr + " bpm";
+    spo2El.textContent = d.spo2 + " %";
+    stressEl.textContent = d.stress + "/5";
+    respEl.textContent = d.resp + " rpm";
+    tempEl.textContent = d.temp.toFixed(1) + " °C";
+    boneEl.textContent = "T-score " + d.bone_tscore.toFixed(2);
+    bpEl.textContent = d.bp_sys + "/" + d.bp_dia + " mmHg";
+
+    // --- Alerts
+    hrAlert.textContent = d.hr > 120 ? "⚠ High HR" : d.hr < 60 ? "⚠ Low HR" : "✅ Normal";
+    spo2Alert.textContent = d.spo2 < 90 ? "⚠ Low O₂" : d.spo2 < 95 ? "⚠ Borderline O₂" : "✅ Normal";
+    stressAlert.textContent = d.stress > 3 ? "⚠ High Stress" : "✅ Normal";
+    respAlert.textContent = d.resp > 25 ? "⚠ High Resp" : d.resp < 10 ? "⚠ Low Resp" : "✅ Normal";
+    tempAlert.textContent = d.temp > 38 ? "⚠ High Temp" : d.temp < 36 ? "⚠ Low Temp" : "✅ Normal";
+    boneAlert.textContent = d.bone_tscore < -1 ? "⚠ Low Density" : "✅ Normal";
+    bpAlert.textContent =
+      d.bp_sys > 140 || d.bp_dia > 90
+        ? "⚠ High BP"
+        : d.bp_sys < 90 || d.bp_dia < 60
+        ? "⚠ Low BP"
+        : "✅ Normal";
+
+    // --- Voice alerts
+    if (d.hr > 130) speak("Warning. Heart rate very high");
+    if (d.spo2 < 90) speak("Critical oxygen level. Check supply immediately");
+    if (d.stress > 3) speak("High stress level detected");
+    if (d.temp > 38) speak("Warning. High body temperature");
+    if (d.bp_sys > 140 || d.bp_dia > 90) speak("Warning. Blood pressure high");
+
+    // --- Gauges (clamped values)
+    hrGauge.data.datasets[0].data = [Math.min(d.hr, 150), Math.max(0, 150 - d.hr)];
+    spo2Gauge.data.datasets[0].data = [Math.min(d.spo2, 100), Math.max(0, 100 - d.spo2)];
+    stressGauge.data.datasets[0].data = [d.stress, 5 - d.stress];
+    respGauge.data.datasets[0].data = [Math.min(d.resp, 40), Math.max(0, 40 - d.resp)];
+    tempGauge.data.datasets[0].data = [Math.min(d.temp, 42), Math.max(0, 42 - d.temp)];
+    const tScaled = Math.min(Math.max(d.bone_tscore + 3, 0), 4);
+    boneGauge.data.datasets[0].data = [tScaled, 4 - tScaled];
+    hrGauge.update();
+    spo2Gauge.update();
+    stressGauge.update();
+    respGauge.update();
+    tempGauge.update();
+    boneGauge.update();
+
+    // --- History chart
+    if (healthChart.data.labels.length > 20) {
+      healthChart.data.labels.shift();
+      healthChart.data.datasets.forEach(ds => ds.data.shift());
+    }
+    healthChart.data.labels.push(new Date().toLocaleTimeString());
+    healthChart.data.datasets[0].data.push(d.hr);
+    healthChart.data.datasets[1].data.push(d.spo2);
+    healthChart.data.datasets[2].data.push(d.stress);
+    healthChart.data.datasets[3].data.push(d.resp);
+    healthChart.data.datasets[4].data.push(d.temp);
+    healthChart.update();
+
+    // Save safe history
+    localStorage.setItem("healthHistory", JSON.stringify({
+      labels: healthChart.data.labels,
+      datasets: healthChart.data.datasets.map(ds => ({ label: ds.label, data: ds.data }))
+    }));
+
+    updateRecommendations(d);
+  }
+
+  // Restore history safely
+  let saved = localStorage.getItem("healthHistory");
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      healthChart.data.labels = parsed.labels || [];
+      parsed.datasets.forEach((ds, i) => {
+        if (healthChart.data.datasets[i]) {
+          healthChart.data.datasets[i].data = ds.data || [];
+        }
+      });
+      healthChart.update();
+    } catch (e) { console.warn("History restore failed", e); }
+  }
+
+  function updateAlertBadge(risk) {
+    alertBadge.className = "px-2 py-0.5 text-xs rounded-full font-semibold";
+    if (risk === "High") {
+      alertBadge.textContent = "High";
+      alertBadge.classList.add("bg-red-100", "text-red-700");
+    } else if (risk === "Medium") {
+      alertBadge.textContent = "Med";
+      alertBadge.classList.add("bg-amber-100", "text-amber-700");
+    } else {
+      alertBadge.textContent = "Low";
+      alertBadge.classList.add("bg-emerald-100", "text-emerald-700");
+    }
+    alertBadge.classList.remove("hidden");
+  }
+
+  // 📄 Export PDF
+  function exportReport() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text("🚀 Space Monitoring Report", 10, 10);
+    doc.text("Active Satellites: " + statSat.textContent, 10, 20);
+    doc.text("Debris: " + statDebris.textContent, 10, 30);
+    doc.text("Close Approaches: " + statCA.textContent, 10, 40);
+
+    doc.text("Heart Rate: " + hrEl.textContent, 10, 60);
+    doc.text("SpO₂: " + spo2El.textContent, 10, 70);
+    doc.text("Stress: " + stressEl.textContent, 10, 80);
+    doc.text("Respiration: " + respEl.textContent, 10, 90);
+    doc.text("Temp: " + tempEl.textContent, 10, 100);
+    doc.text("Bone Density: " + boneEl.textContent, 10, 110);
+    doc.text("BP: " + bpEl.textContent, 10, 120);
+
+    doc.text("Recommendation:", 10, 140);
+    let recs = document.getElementById("aiRecommendations").innerText.split("\n");
+    recs.forEach((line, idx) => {
+      if (line.trim()) doc.text(line, 10, 150 + idx * 10);
+    });
+
+    doc.save("report.pdf");
+  }
+
+  // WebSocket connection
+  function connectWS() {
+    const ws = new WebSocket("ws://127.0.0.1:8000/ws/telemetry");
+    ws.onopen = () => {
+      wsBadge.textContent = "Live";
+      wsBadge.className = "px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700 border";
     };
+    ws.onmessage = ev => {
+      const msg = JSON.parse(ev.data);
 
-    // Search filter
-    const searchBox = document.getElementById("searchBox");
-    searchBox.addEventListener("input", () => {
-      const query = searchBox.value.toLowerCase();
-      const rows = cjData.filter(r => r.a.toLowerCase().includes(query) || r.b.toLowerCase().includes(query));
-      renderTable(rows);
-    });
-
-    // Sidebar alert badge updater
-    function updateAlertBadge(risk) {
-      alertBadge.className = "px-2 py-0.5 text-xs rounded-full font-semibold"; // reset
-      if (risk === "High") {
-        alertBadge.textContent = "High";
-        alertBadge.classList.add("bg-red-100","text-red-700","dark:bg-red-500/20","dark:text-red-200");
-      } else if (risk === "Medium") {
-        alertBadge.textContent = "Med";
-        alertBadge.classList.add("bg-amber-100","text-amber-700","dark:bg-amber-500/20","dark:text-amber-200");
-      } else {
-        alertBadge.textContent = "Low";
-        alertBadge.classList.add("bg-emerald-100","text-emerald-700","dark:bg-emerald-500/20","dark:text-emerald-200");
+      if (msg.topic === "space/summary") {
+        statSat.textContent = msg.payload.active_sats;
+        statDebris.textContent = msg.payload.debris;
+        statCA.textContent = msg.payload.close_approaches;
+        updateChart(msg.payload.active_sats, msg.payload.debris);
       }
-      alertBadge.classList.remove("hidden");
-    }
 
-    function connectWS(){
-      const ws = new WebSocket("ws://127.0.0.1:8000/ws/telemetry");
-      ws.onopen = () => {
-        wsBadge.textContent = "Live";
-        wsBadge.className = "px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-200 dark:border-emerald-400/30";
-      };
-      ws.onmessage = (ev) => {
-        const msg = JSON.parse(ev.data);
-
-        if(msg.topic === "space/summary"){
-          statSat.textContent = msg.payload.active_sats;
-          statDebris.textContent = msg.payload.debris;
-          statCA.textContent = msg.payload.close_approaches;
-          updateChart(msg.payload.active_sats, msg.payload.debris);
-        }
-
-        if(msg.topic && msg.topic.startsWith("space/alerts")){
-          const payload = msg.payload;
-          const riskLevel = (Number(payload.min_distance_km)<=5?'High':Number(payload.min_distance_km)<=10?'Medium':'Low');
-
-          const item = document.createElement("li");
-          item.className = "rounded-xl border px-3 py-2 bg-gray-100 border-gray-300 dark:bg-white/[0.03] dark:border-white/10";
-          item.innerHTML = `
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <i data-lucide="alert-octagon" class="w-4 h-4 text-red-500 dark:text-red-300"></i>
-                <span class="font-medium">${payload.alert}</span>
-              </div>
-              <span class="text-xs text-gray-500 dark:text-white/50">${payload.time}</span>
+      if (msg.topic && msg.topic.startsWith("space/alerts")) {
+        const payload = msg.payload;
+        const riskLevel =
+          Number(payload.min_distance_km) <= 5
+            ? "High"
+            : Number(payload.min_distance_km) <= 10
+            ? "Medium"
+            : "Low";
+        const item = document.createElement("li");
+        item.className = "rounded-xl border px-3 py-2 bg-gray-100 dark:bg-white/[0.03]";
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="alert-octagon" class="w-4 h-4 text-red-500"></i>
+              <span class="font-medium">${payload.alert}</span>
             </div>
-            <div class="mt-1 text-sm text-gray-700 dark:text-white/80">Min Distance: <b>${payload.min_distance_km}</b> km • ${payload.object}</div>
-          `;
-          alerts.prepend(item);
+            <span class="text-xs text-gray-500">${payload.time}</span>
+          </div>
+          <div class="mt-1 text-sm">Min Distance: <b>${payload.min_distance_km}</b> km • ${payload.object}</div>
+        `;
+        alerts.prepend(item);
 
-          cjData.unshift({
-            t: payload.time,
-            a: payload.object.split(" vs ")[0],
-            b: payload.object.split(" vs ")[1],
-            d: Number(payload.min_distance_km),
-            risk: riskLevel
-          });
-          renderTable(cjData);
-          updateAlertBadge(riskLevel);
-          lucide.createIcons();
+        cjData.unshift({
+          t: payload.time,
+          a: payload.object.split(" vs ")[0],
+          b: payload.object.split(" vs ")[1],
+          d: Number(payload.min_distance_km),
+          risk: riskLevel
+        });
+        renderTable(cjData);
+        updateAlertBadge(riskLevel);
+
+        if (riskLevel === "High") {
+          speak("Warning. High debris risk detected");
+          document.body.classList.add("high-risk");
+        } else {
+          document.body.classList.remove("high-risk");
         }
-      };
-      ws.onclose = () => {
-        wsBadge.textContent = "Disconnected";
-        wsBadge.className = "px-2 py-1 rounded-full text-xs bg-red-100 text-red-700 border border-red-300 dark:bg-red-500/20 dark:text-red-200 dark:border-red-400/30";
-        setTimeout(connectWS, 1500);
-      };
-    }
-    connectWS();
-  </script>
+
+        lucide.createIcons();
+      }
+
+      if (msg.channel === "health" || msg.topic === "health") {
+        updateHealthUI(msg.data || msg.payload);
+      }
+    };
+    ws.onclose = () => {
+      wsBadge.textContent = "Disconnected";
+      wsBadge.className = "px-2 py-1 rounded-full text-xs bg-red-100 text-red-700 border";
+      setTimeout(connectWS, 1500);
+    };
+  }
+  connectWS();
+</script>
+
 </body>
 </html>
