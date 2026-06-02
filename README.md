@@ -3,6 +3,7 @@
 An AI-powered mission control dashboard that combines **Astronaut Health Monitoring** and **Satellite Collision Prevention** into a unified real-time intelligence platform.
 
 The system continuously analyzes astronaut vitals, tracks satellites and orbital debris, detects anomalies using Machine Learning, and generates predictive alerts for mission operators. Designed as a scalable prototype, the platform can be adapted for future applications in ISRO, NASA, ESA missions, smart healthcare systems, and autonomous space operations. 
+** Frontend is on github io for backend, run on the terminal**
 
 ---
 
