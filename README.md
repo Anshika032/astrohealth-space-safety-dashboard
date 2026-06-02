@@ -319,6 +319,7 @@ The system incorporates:
 
 ---
 
+<img width="1844" height="949" alt="Screenshot 2025-09-18 131521" src="https://github.com/user-attachments/assets/59a88e0f-de9e-4862-9851-1b1122c9a635" />
 
 
 
